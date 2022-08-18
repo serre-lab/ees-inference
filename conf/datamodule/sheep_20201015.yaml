@@ -1,0 +1,20 @@
+# @package _group_
+_target_: datamodules.SheepDataModule
+data_dir: /media/data_cifs_lrs/projects/prj_deepspine/data/SheepData/20201015/
+offset: 100
+window_size: 300
+selected_muscles: [
+  'LBicepsFemoris', 
+  'LGastrocnemius', 
+  'LGracilis',
+  'LPeroneusLongus', 
+  'RGastrocnemius', 
+  'RPeroneusLongus',
+  'RTensorFasciaeLatae']
+cov_threshold: 0.0
+corr_threshold: 0.4
+num_folds: 10
+train_bs: null
+valid_bs: null
+test_bs: null
+device: cpu

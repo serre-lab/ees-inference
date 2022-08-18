@@ -1,0 +1,26 @@
+# @package _group_
+_target_: datamodules.SheepDataModule
+data_dir: /media/data_cifs/projects/prj_deepspine/isi-motioncap/202105271300-Thelma
+offset: 0.1
+window_size: 0.3
+selected_muscles: [
+  'LPeroneus', 
+  'LGastrocnemius', 
+  'LBicepsFemoris', 
+  'LGracilis', 
+  'RPeroneus', 
+  'RGastrocnemius', 
+  'RBicepsFemoris', 
+  'RGracilis'
+]
+q: 99
+holdout_frequencies: [
+  50
+]
+holdout_amplitudes: [
+  780
+]
+train_bs: null
+valid_bs: null
+test_bs: null
+device: cpu

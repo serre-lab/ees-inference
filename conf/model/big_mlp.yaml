@@ -1,0 +1,30 @@
+# @package _group_
+_target_: model.Stim2EMG
+network:
+  in_size: 15
+  out_size: 9
+  embedding:
+    _target_: torch.nn.Identity
+  core:
+    _target_: layers.feedforward.MLP
+    in_size: ${model.network.in_size}
+    hidden_sizes: [64, 64, 8]
+    dropout: 0.0
+    activation: relu
+    last_activation: identity
+  readout:
+    _target_: layers.feedforward.MLP
+    in_size: 8
+    hidden_sizes:
+    - 256
+    - ${model.network.out_size}
+    activation: relu
+    # last_activation: sigmoid
+    last_activation: identity
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 0.001
+  weight_decay: 0.0005
+loss:
+  _target_: torch.nn.L1Loss
+  # _target_: torch.nn.BCELoss

@@ -1,0 +1,93 @@
+# @package _group_
+name: vae
+_target_: model.Stim2StimEMG
+params:
+  latent_dim: 16
+  beta: 0.001
+  network:
+    encoder:
+      _target_: layers.feedforward.MLP
+      in_size: 7
+      hidden_sizes: [128, 64, 32]
+      normalization: ln
+      activation: elu
+      last_normalization: False
+      last_activation: identity
+    decoder:
+      _target_: layers.feedforward.MLP
+      in_size: 16
+      hidden_sizes: [64, 128, 7]
+      normalization: ln
+      activation: elu
+      last_normalization: False
+      last_activation: sigmoid
+    predictor:
+      _target_: layers.feedforward.MLP
+      in_size: 16
+      hidden_sizes: [64, 128, 15]
+      dropout: 0
+      normalization: ln
+      activation: elu
+      last_dropout: 0.0
+      last_normalization: False
+      last_activation: identity
+  optimizer:
+    train:
+      _target_: torch.optim.Adam
+      lr: 0.001
+      weight_decay: 0.0005
+    inference:
+      _target_: torch.optim.Adam
+      lr: 0.001
+  loss:
+    stim:
+      _target_: torch.nn.BCELoss
+    emg:
+      _target_: torch.nn.BCELoss
+
+# # @package _group_
+# name: vae
+# _target_: model.Stim2StimEMG
+# params:
+#   latent_dim: 16
+#   beta: 0.001
+#   network:
+#     encoder:
+#       _target_: layers.feedforward.MLP
+#       in_size: 15
+#       hidden_sizes: [128, 64, 32, 32]
+#       normalization: ln
+#       activation: elu
+#       last_normalization: False
+#       last_activation: identity
+#     decoder:
+#       _target_: layers.feedforward.MLP
+#       in_size: 16
+#       hidden_sizes: [32, 64, 128, 15]
+#       normalization: ln
+#       activation: elu
+#       last_normalization: False
+#       last_activation: identity
+#     predictor:
+#       _target_: layers.feedforward.MLP
+#       in_size: 15
+#       hidden_sizes: [64, 64, 7]
+#       dropout: 0
+#       normalization: ln
+#       activation: elu
+#       last_dropout: 0.0
+#       last_normalization: False
+#       last_activation: sigmoid
+#   optimizer:
+#     train:
+#       _target_: torch.optim.Adam
+#       lr: 0.001
+#       weight_decay: 0.0005
+#     inference:
+#       _target_: torch.optim.Adam
+#       lr: 0.001
+#   loss:
+#     stim:
+#       _target_: torch.nn.BCELoss
+#     emg:
+#       _target_: torch.nn.BCELoss

@@ -1,0 +1,49 @@
+mode: 'train_then_eval'
+seed: 1213
+checkpointer: null
+model_save_path: null
+visualization: null
+exp_name: 'outputs'
+side: 'both'
+stage: 'test'
+electrode_index: 0
+target_index: 0
+
+trainer:
+  _target_: trainer.Trainer
+  # general
+  device: cpu
+  metrics:
+    l1:
+      _target_: ignite.metrics.MeanAbsoluteError
+    mse:
+      _target_: ignite.metrics.MeanSquaredError
+    corr:
+      _target_: metrics.Correlation
+      dim: 1
+
+  # training
+  num_epochs: 5000
+  deterministic: True
+  eval_interval: 100
+  checkpoint_dir: models
+
+  # inference
+  num_rounds: 2 
+  num_simulations: 1024 
+  simulation_batch_size: 1000 
+  training_batch_size: 50
+  num_samples: 10000
+  filtering_ratio: 0.1
+  num_proposals: 5
+  timeout: 600
+
+defaults:
+  - model: mlp
+  - datamodule: sheep_20201019
+
+hydra:
+  run:
+    dir: ${exp_name}/${now:%Y-%m-%d_%H-%M-%S}
+    # dir: outputs/${model.name}/10-fold_cv_${trainer.fold_idx}/${now:%Y-%m-%d_%H-%M-%S}
+    
