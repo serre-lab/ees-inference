@@ -1,14 +1,15 @@
-# Neural network guided optimal recruitment of muscles
-![Overview](thumbnail.png)
-
+<p align="center">
+<b> Fast Inference of Spinal Neuromodulation for Motor Control using Amortized Neural Networks </b>
+<img src="thumbnail.png" width="640" height="480">
+</p>
+<p align="justify">
 Epidural electrical stimulation (EES) has recently emerged as a potential therapeutic approach to restore motor function following chronic spinal cord injury (SCI). However, the lack of robust and systematic algorithms to automatically identify EES parameters that drive sensorimotor networks has become one of the main barriers to the clinical translation of EES. In this work, we present a novel, fully-automated computational framework to identify EES parameter combinations that optimally select for target muscle activation.
+</p>
 
-# Deep Spine
-## Datasets
-### Sheep Dataset
-* 20200923 dataset: https://drive.google.com/file/d/15rsHn90EPBDH_uBBA_CmglhFxdf8Skqy/view?usp=sharing
-* 20201019 dataset: https://drive.google.com/file/d/10WBeVNth93qDANM_B_1SbV2c1iyIr6GY/view?usp=sharing
-## Training
+### Creating a runtime environment
+### Datasets
+
+### Forward model training
 ```
 bash jobs/run.sh \
     --devce $device \
@@ -20,7 +21,7 @@ bash jobs/run.sh \
     --data_dir $data_dir \
     --out_size $out_size
 ```
-## Evaluation
+### Forward model evaluation
 ```
 bash jobs/run.sh \
     --devce $device \
@@ -36,8 +37,7 @@ bash jobs/run.sh \
     --checkpointer_dir "models"
 ```
 
-## NDE training
-### Single run 
+### Training the inverse model (Neural Density Estimator)
 ```
 python main.py \
     hydra.run.dir=outputs/10-fold_cv_0/2020-12-08_20-04-17 \
@@ -48,7 +48,7 @@ python main.py \
     electrode_index=0 \
     target_index=0
 ```
-### Multi-run with Joblib
+### Parallelize the training of electrode-conditioned inverse models
 #### Requirements
 ```
 # Install Hydra joblib plugin
@@ -68,4 +68,3 @@ python main.py \
     target_index=0,1 \
     --multirun
 ```
-
