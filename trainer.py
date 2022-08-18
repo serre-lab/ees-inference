@@ -121,11 +121,11 @@ class Trainer():
         # trainer.logger = setup_logger("Trainer")
         evaluator.logger = setup_logger("Evaluator")
 
-        # # attach running average to trainer
-        # RunningAverage(output_transform=lambda x: x).attach(trainer, "running_avg_loss")
-        # @trainer.on(Events.EPOCH_COMPLETED)
-        # def log_running_avg_metrics(engine):
-        #     print("Epoch[{}] Running avg loss: {:.2f}".format(engine.state.epoch, engine.state.metrics['running_avg_loss']))
+        # attach running average to trainer
+        RunningAverage(output_transform=lambda x: x).attach(trainer, "running_avg_loss")
+        @trainer.on(Events.EPOCH_COMPLETED)
+        def log_running_avg_metrics(engine):
+            print("Epoch[{}] Running avg loss: {:.2f}".format(engine.state.epoch, engine.state.metrics['running_avg_loss']))
 
         # attach metrics to evaluator
         for name, metric in self.metrics.items():
@@ -152,7 +152,6 @@ class Trainer():
         )
         to_save = {
             'model': model, 
-            # 'optimizer': self.optimizer, 
             'trainer': trainer
         }
         evaluator.add_event_handler(Events.COMPLETED, checkpointer, to_save)
@@ -194,7 +193,6 @@ class Trainer():
         for name, metric in self.metrics.items():
             metric.attach(evaluator, name)
 
-        # 
         @evaluator.on(Events.EPOCH_COMPLETED)
         def log_results(engine):
             metrics = engine.state.metrics

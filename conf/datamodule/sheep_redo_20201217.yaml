@@ -1,5 +1,5 @@
 # @package _group_
-_target_: datamodules.SheepDataModule
+_target_: datamodules.SheepDataModuleV0
 data_dir: /media/data_cifs_lrs/projects/prj_deepspine/data/SheepData/20201217/
 offset: 100
 window_size: 300

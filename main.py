@@ -14,11 +14,18 @@ def run(cfg):
     model = instantiate(cfg.model)
     dm = instantiate(cfg.datamodule)
     trainer = instantiate(cfg.trainer)
+
     # prepare dataset
     dm.prepare_data()
-    dm.setup(side=cfg.side) # select one fold over 10 folds
 
-    if cfg.mode == 'eval':
+    if cfg.fold_idx == -1:
+        dm.setup(side=cfg.side)
+    else:
+        dm.setup(fold_idx=cfg.fold_idx, side=cfg.side)
+
+    if cfg.mode == 'train':
+         trainer.train(model, datamodule=dm)
+    elif cfg.mode == 'eval':
         '''
         trainer.eval(
             model, 

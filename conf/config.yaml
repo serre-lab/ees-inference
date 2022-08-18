@@ -8,6 +8,7 @@ side: 'both'
 stage: 'test'
 electrode_index: 0
 target_index: 0
+fold_idx: -1
 
 trainer:
   _target_: trainer.Trainer

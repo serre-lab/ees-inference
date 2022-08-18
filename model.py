@@ -28,6 +28,7 @@ class Stim2EMG(nn.Module):
         x, y = batch
         y_pred, _ = self(x)
         loss = self.criterion(y_pred, y)
+        print('Train loss: {0:.3f}'.format(loss.item()))
         loss.backward()
         self.optimizer.step()
 
