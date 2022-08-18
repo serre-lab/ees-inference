@@ -11,16 +11,22 @@ Epidural electrical stimulation (EES) has recently emerged as a potential therap
 
 ### Forward model training
 ```
-bash jobs/run.sh \
-    --devce $device \
-    --model $model \
-    --mode "train_then_eval" \
-    --dm $dm \
-    --save_dir $save_dir \
-    --side $side \
-    --data_dir $data_dir \
-    --out_size $out_size
+OMP_NUM_THREADS=1 python main.py hydra/launcher=joblib  \
+                                 hydra.run.dir=<path to dir you want as a working directory> \
+                                 model=mlp \
+                                 mode=train \
+                                 datamodule=sheep_20210610 \
+                                 model_save_path=<path to save/load checkpoints> \
+                                 model.network.out_size=7 \
+                                 model.network.in_size=20 \
+                                 trainer.device='cpu'
+
 ```
+<p align="justify">
+We note that model.network.out_size and model.network.in_size should be specified based on the number of EMG channels used and the EES parameter dimensionality respectively.
+</p>
+
+
 ### Forward model evaluation
 ```
 bash jobs/run.sh \
