@@ -1,5 +1,7 @@
 # Neural network guided optimal recruitment of muscles
+![Overview](thumbnail.png)
 
+Epidural electrical stimulation (EES) has recently emerged as a potential therapeutic approach to restore motor function following chronic spinal cord injury (SCI). However, the lack of robust and systematic algorithms to automatically identify EES parameters that drive sensorimotor networks has become one of the main barriers to the clinical translation of EES. In this work, we present a novel, fully-automated computational framework to identify EES parameter combinations that optimally select for target muscle activation.
 
 # Deep Spine
 ## Datasets
