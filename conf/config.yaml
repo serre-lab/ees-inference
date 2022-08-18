@@ -24,7 +24,7 @@ trainer:
       dim: 1
 
   # training
-  num_epochs: 5000
+  num_epochs: 1000
   deterministic: True
   eval_interval: 100
   checkpoint_dir: models
