@@ -1,3 +1,6 @@
+# Neural network guided optimal recruitment of muscles
+
+
 # Deep Spine
 ## Datasets
 ### Sheep Dataset
