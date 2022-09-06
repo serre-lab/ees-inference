@@ -7,7 +7,10 @@ Epidural electrical stimulation (EES) has recently emerged as a potential therap
 </p>
 
 ### Creating a runtime environment
+
+
 ### Datasets
+Data is available on request from the authors.
 
 ### Forward model training
 ```
@@ -28,49 +31,35 @@ We note that model.network.out_size and model.network.in_size should be specifie
 
 
 ### Forward model evaluation
-```
-bash jobs/run.sh \
-    --devce $device \
-    --model $model \
-    --mode "eval" \
-    --dm $dm \
-    --save_dir $save_dir \
-    --side $side \
-    --data_dir $data_dir \
-    --out_size $out_size \
-    --fold_idx $fold_idx \
-    --working_dir $working_dir \
-    --checkpointer_dir "models"
-```
+To evaluate the forward model, one can use the same command as above but with the flag `mode=eval`. To extract error metrics (such as per-EMG channel L1 prediction errors) set `mode=metrics`. You can also perform a simple Maximum Likelikhood Estimation using a genetic algorithm to recover EES parameters by setting `mode=MLE`.
 
-### Training the inverse model (Neural Density Estimator)
+### Training the electrode-conditioned inverse model
 ```
-python main.py \
-    hydra.run.dir=outputs/10-fold_cv_0/2020-12-08_20-04-17 \
-    datamodule.data_dir=/Path/to/dataset/deep_spine/20200923 \
-    model=mlp \
-    mode=inference \
-    model_save_path=/absolute/path/to/models/checkpoints_dir/ \
-    electrode_index=0 \
-    target_index=0
+OMP_NUM_THREADS=1 python main.py  hydra/launcher=joblib  \
+                                  hydra.run.dir=<path to dir you want as a working directory> \    
+                                  model=mlp \
+                                  mode=inference  \
+                                  datamodule=sheep_20210610 \
+                                  model_save_path=<path to save/load checkpoints> \
+                                  electrode_index=<the electrode that you want to condition on. range [0, num_electrodes-1]>  \
+                                  target_index=<pick a target EMG. Chosen from the test set>  \
+                                  model.network.out_size=7 \
+                                  model.network.in_size=20 \
+                                  trainer.device='cpu'
 ```
 ### Parallelize the training of electrode-conditioned inverse models
-#### Requirements
+As mentioned in the manuscript, all the electrode-conditioned inverse models can be trained in parallel. We'll use the hydra joblib launcher for this purpose.
 ```
-# Install Hydra joblib plugin
-pip install hydra-joblib-launcher --upgrade
-```
-#### Run
-```
-# examle of a multirun cmd, adding 1) hydra/launcher=joblib and 2) --multirun, and setting multiple values for electrode_index and target_index
-python main.py \
-    hydra/launcher=joblib \
-    hydra.run.dir=outputs/10-fold_cv_0/2020-12-08_20-04-17 \
-    datamodule.data_dir=/Path/to/dataset/deep_spine/20200923 \
-    model=mlp \
-    mode=inference \
-    model_save_path=/absolute/path/to/models/checkpoints_dir/ \
-    electrode_index=0,1,2,3,4,5 \
-    target_index=0,1 \
-    --multirun
+OMP_NUM_THREADS=1 python main.py  hydra/launcher=joblib  \
+                                  hydra.run.dir=<path to dir you want as a working directory> \    
+                                  model=mlp \
+                                  mode=inference  \
+                                  datamodule=sheep_20210610 \
+                                  model_save_path=<path to save/load checkpoints> \
+                                  electrode_index=0,1,2,3,...  \
+                                  target_index=<pick a target EMG. Chosen from the test set. This can be parallelized too>  \
+                                  model.network.out_size=7 \
+                                  model.network.in_size=20 \
+                                  trainer.device='cpu' \
+                                  --multirun
 ```
