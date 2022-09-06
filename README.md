@@ -7,7 +7,12 @@ Epidural electrical stimulation (EES) has recently emerged as a potential therap
 </p>
 
 ### Creating a runtime environment
+You can use the anaconda package manager to install the required dependencies
 
+```
+conda env create -f environment.yml
+conda activate eesinference
+```
 
 ### Datasets
 Data is available on request from the authors.
