@@ -7,7 +7,10 @@ Epidural electrical stimulation (EES) has recently emerged as a potential therap
 </p>
 
 ### Creating a runtime environment
+
+
 ### Datasets
+Data is available on request from the authors.
 
 ### Forward model training
 ```
