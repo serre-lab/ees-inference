@@ -401,13 +401,18 @@ class Trainer():
             print("Loading density estimator pth")
             posterior = torch.load('density_estimator.pth')
         else:
+            import time
+            st = time.time()
             # train NDE
             posterior = inference.train(simulator, target)
+            et = time.time()
+            print('Training time: {}'.format(et - st))
+
             if posterior is None:
                 # finish the inference process when it is timeout
                 return
             
-            torch.save(posterior, 'density_estimator.pth')
+            #torch.save(posterior, 'density_estimator.pth')
 
         import matplotlib.pyplot as plt
 
@@ -427,6 +432,7 @@ class Trainer():
         #plt.savefig('null.png')
         plt.show()
         '''
+
         path_x, path_y = inference.fancypairplot(posterior, target, parameters, stars=stars, contour=True)
 
         test_params = parameters.unsqueeze(0).repeat(path_x.shape[0],1)
@@ -448,13 +454,19 @@ class Trainer():
             ax.axis('off')
             ax.set_title('%0.2f'%(errs[k].item()))
 
-        plt.savefig('posterior_predictive.png', bbox_inches='tight')
+        #plt.savefig('posterior_predictive.png', bbox_inches='tight')
         print(datamodule.selected_muscles)
-        plt.show()
-        import ipdb; ipdb.set_trace()
         
+        #plt.show(block=False)
+        #import ipdb; ipdb.set_trace()
+        
+        st = time.time()
         # # plot posterior samples
         fig = inference.pairplot(posterior, target, parameters)
+        et = time.time()
+        print('Sampling Time: {}'.format(et -st))
+
+
         # fig.savefig('targetIdx%d_electrodeIdx%d.png' % (target_index, electrode_index))
         x, theta, log_probability, corr = inference.sampling_proposals(simulator, posterior, target)
 

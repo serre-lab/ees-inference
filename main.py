@@ -26,7 +26,6 @@ def run(cfg):
     if cfg.mode == 'train':
          trainer.train(model, datamodule=dm)
     elif cfg.mode == 'eval':
-        '''
         trainer.eval(
             model, 
             datamodule=dm,
@@ -35,7 +34,7 @@ def run(cfg):
             model_save_path=cfg.model_save_path,
             visualization=cfg.visualization
         )
-        '''
+    elif cfg.mode == 'metrics':
         trainer.get_metrics(
             model, 
             datamodule=dm,

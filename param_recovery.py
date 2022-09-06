@@ -368,7 +368,7 @@ class Inference():
                     points=parameters[:2],
                     points_offdiag={'markersize':3, 'marker':'.'},
                     points_colors='r')
-        plt.show()
+        #plt.show()
 
         return fig
 
@@ -486,7 +486,7 @@ class Inference():
         y_hist.set_yticks([])
 
         plt.savefig('posterior_sensitivity.png', bbox_inches='tight')
-        plt.show()
+        #plt.show()
 
         if contour:
             return path_x, path_y
